@@ -20,12 +20,12 @@ function SLIDER.scroll_to(slider, x, y)
 	y = core.clamp(y, 0, 1)
 	if slider.vertical then
 		local adjusted_height = slider.bounds_size.y
-		handle_pos.y = y * adjusted_height -- adjusted_height - 
+		handle_pos.y = y * adjusted_height
 		gui.set_position(slider.node, handle_pos)
 		gui.set_size(slider.fill, vmath.vector3(slider.fill_size.x, handle_pos.y, slider.fill_size.z))
 	else
 		local adjusted_width = slider.bounds_size.x
-		handle_pos.x = x * adjusted_width -- adjusted_width - x * adjusted_width
+		handle_pos.x = x * adjusted_width
 		gui.set_position(slider.node, handle_pos)
 		gui.set_size(slider.fill, vmath.vector3(handle_pos.x, slider.fill_size.y, slider.fill_size.z))
 	end
@@ -79,7 +79,9 @@ function M.vertical(handle_id, fill_id, bounds_id, action_id, action, fn, refres
 			local size = bounds_size.y
 			local ratio = (size - (action_pos.y - bounds_pos.y) / bounds_scale.y) / size
 			slider.ratio = 1 - ratio
-			SLIDER.scroll_to(slider, 0, 1 - ratio)
+			ratio = core.clamp(1 - ratio, 0, 1)
+			slider.ratio = ratio
+			SLIDER.scroll_to(slider, 0, ratio)
 			fn(slider)
 		end
 	else
@@ -128,8 +130,9 @@ function M.horizontal(handle_id, fill_id, bounds_id, action_id, action, fn, refr
 			local bounds_pos = core.get_root_position(bounds)
 			local size = bounds_size.x
 			local ratio = (size - (action_pos.x - bounds_pos.x) / bounds_scale.x) / size
-			slider.ratio = 1 - ratio
-			SLIDER.scroll_to(slider, 1 - ratio, 0)
+			ratio = core.clamp(1 - ratio, 0, 1)
+			slider.ratio = ratio
+			SLIDER.scroll_to(slider, ratio, 0)
 			fn(slider)
 		end
 	else
