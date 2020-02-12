@@ -5,7 +5,7 @@ local radio = require "gooey.internal.radio"
 local list = require "gooey.internal.list"
 local input = require "gooey.internal.input"
 local scrollbar = require "gooey.internal.scrollbar"
-local slider = require "extended_gooey.slider"
+local slider = require "gooey.internal.slider"
 
 local M = {}
 
