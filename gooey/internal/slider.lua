@@ -8,7 +8,7 @@ local sliders = {}
 -- instance functions
 local SLIDER = {}
 function SLIDER.refresh(slider)
-	if slider.refresh_fn then slider.refresh_fn(button) end
+	if slider.refresh_fn then slider.refresh_fn(slider) end
 end
 function SLIDER.scroll_to(slider, x, y)
 	assert(slider)
