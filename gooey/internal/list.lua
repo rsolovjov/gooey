@@ -298,7 +298,7 @@ function M.dynamic(list_id, stencil_id, item_id, data, action_id, action, config
 		if list.horizontal then
 			item_count = (math.ceil(list.stencil_size.x / item_size.x) + 1)
 		else
-			item_count = (math.ceil(list.stencil_size.y / item_size.y) + 1)
+			item_count = 12 -- (math.ceil(list.stencil_size.y / item_size.y) + 1)
 		end
 		for i=1,item_count do
 			local nodes = gui.clone_tree(item_node)
