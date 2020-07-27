@@ -151,9 +151,9 @@ local function handle_input(list, action_id, action, click_fn)
 		list.consumed = true
 		list.scrolling = true
 		if list.horizontal then
-			list.scroll_pos.x = list.scroll_pos.x + (action_pos.x - list.action_pos.x)
+			list.scroll_pos.x = list.scroll_pos.x + (action_pos.x - list.action_pos.x) * (list.pressed_scroll_speed or 1)
 		else
-			list.scroll_pos.y = list.scroll_pos.y + (action_pos.y - list.action_pos.y)
+			list.scroll_pos.y = list.scroll_pos.y + (action_pos.y - list.action_pos.y) * (list.pressed_scroll_speed or 1)
 		end
 		list.action_pos = action_pos
 	else
