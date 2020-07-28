@@ -166,8 +166,8 @@ local function handle_input(list, action_id, action, click_fn)
 			list.scroll_pos.x = math.max(list.scroll_pos.x, list.min_x)
 			list.scroll.x = (list.scroll_pos.x / list.max_x)
 		else
-			list.scroll_pos.y = math.min(list.scroll_pos.y, list.max_y)
-			list.scroll_pos.y = math.max(list.scroll_pos.y, list.min_y)
+			list.scroll_pos.y = list.scroll_pos.y -- math.min(list.scroll_pos.y, list.max_y)
+			list.scroll_pos.y = list.scroll_pos.y -- math.max(list.scroll_pos.y, list.min_y)
 			list.scroll.y = (list.scroll_pos.y / list.max_y)
 		end
 	end
