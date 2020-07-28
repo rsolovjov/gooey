@@ -89,6 +89,9 @@ end
 function LIST.set_carousel(list)
 	list.carousel = true
 end
+function LIST.set_overscroll(list)
+	list.overscroll = true
+end
 
 -- get a list instance and set up some basics of a list on the instance
 local function get_instance(list_id, stencil_id, refresh_fn, lists)
@@ -145,7 +148,7 @@ local function handle_input(list, action_id, action, click_fn)
 		if action.released then
 			list.scrolling = false
 		end
-	-- handle touch and drag scrolling
+		-- handle touch and drag scrolling
 	elseif list.pressed and vmath.length(list.pressed_pos - action_pos) > 10 then
 		list.have_scrolled = true
 		list.consumed = true
@@ -161,14 +164,27 @@ local function handle_input(list, action_id, action, click_fn)
 	end
 	-- limit to scroll bounds unlss this is a carousel list
 	if list.scrolling and not list.carousel then
-		if list.horizontal then
-			list.scroll_pos.x = math.min(list.scroll_pos.x, list.max_x)
-			list.scroll_pos.x = math.max(list.scroll_pos.x, list.min_x)
-			list.scroll.x = (list.scroll_pos.x / list.max_x)
+		print(list.overscroll)
+		if list.overscroll then
+			if list.horizontal then
+				list.scroll_pos.x = list.scroll_pos.x
+				list.scroll_pos.x = list.scroll_pos.x
+				list.scroll.x = (list.scroll_pos.x / list.max_x)
+			else
+				list.scroll_pos.y = list.scroll_pos.y
+				list.scroll_pos.y = list.scroll_pos.y
+				list.scroll.y = (list.scroll_pos.y / list.max_y)
+			end
 		else
-			list.scroll_pos.y = list.scroll_pos.y -- math.min(list.scroll_pos.y, list.max_y)
-			list.scroll_pos.y = list.scroll_pos.y -- math.max(list.scroll_pos.y, list.min_y)
-			list.scroll.y = (list.scroll_pos.y / list.max_y)
+			if list.horizontal then
+				list.scroll_pos.x = math.min(list.scroll_pos.x, list.max_x)
+				list.scroll_pos.x = math.max(list.scroll_pos.x, list.min_x)
+				list.scroll.x = (list.scroll_pos.x / list.max_x)
+			else
+				list.scroll_pos.y = math.min(list.scroll_pos.y, list.max_y)
+				list.scroll_pos.y = math.max(list.scroll_pos.y, list.min_y)
+				list.scroll.y = (list.scroll_pos.y / list.max_y)
+			end
 		end
 	end
 
@@ -216,6 +232,8 @@ function M.static(list_id, stencil_id, item_ids, action_id, action, config, fn, 
 	list.static = true
 	list.horizontal = config and config.horizontal
 	list.carousel = config and config.carousel
+	list.overscroll = config and config.overscroll
+
 	assert(not list.carousel, "You cannot create a carousel from a static list")
 
 	-- populate list items (once!)
@@ -341,8 +359,8 @@ function M.dynamic(list_id, stencil_id, item_id, data, action_id, action, config
 			list.scroll_pos.y = 0
 			list.scroll_pos.x = 0
 			update_dynamic_listitem_positions(list)
-		-- more items in list than visible
-		-- assign indices and enable list items
+			-- more items in list than visible
+			-- assign indices and enable list items
 		else
 			local first_index = list.items[1].index
 			if (first_index + #list.items) > #data then
